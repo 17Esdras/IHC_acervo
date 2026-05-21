@@ -1,0 +1,730 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="https://d16ilfvy4mv02r.cloudfront.net/workspaces/hHrqRXUlHJHsanNIgYdhgvU2gz3AuKq5/26a10aec-62ab-4d2d-b0d4-f0f77ccf831b/files/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acervo – Casa do Choro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --vermelho:        #9c3f30;
+      --vermelho-escuro: #7a2e22;
+      --dourado:         #c8923a;
+      --fundo:           #faf8f5;
+      --branco:          #ffffff;
+      --cinza-1:         #f0ece6;
+      --cinza-2:         #ddd8d0;
+      --texto:           #2d2d2d;
+      --texto-suave:     #666;
+      --sombra:          0 2px 16px rgba(0,0,0,.08);
+      --radius:          14px;
+      --header-h:        68px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      min-height: 100vh;
+      /* evita scroll horizontal em mobile */
+      overflow-x: hidden;
+    }
+
+    /* ════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════ */
+    header {
+      background: var(--branco);
+      border-bottom: 1px solid var(--cinza-2);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-h);
+    }
+
+    /* Logo */
+    .logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+      z-index: 210;
+    }
+    .logo-mark {
+      width: 40px; height: 40px; background: var(--vermelho);
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; color: #fff; font-size: 20px;
+    }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .logo-text span:first-child {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 16px; color: var(--texto);
+    }
+    .logo-text span:last-child {
+      font-size: 11px; color: var(--texto-suave); letter-spacing: .5px;
+    }
+
+    /* Nav desktop */
+    .nav-desktop { display: flex; gap: 4px; }
+    .nav-desktop a {
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      color: var(--texto-suave); padding: 6px 14px;
+      border-radius: 20px; transition: all .2s;
+    }
+    .nav-desktop a:hover { color: var(--texto); background: var(--cinza-1); }
+    .nav-desktop a.active { color: var(--vermelho); background: #fbecea; }
+
+    /* ── Botão hambúrguer ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px; height: 40px;
+      border: none; background: none;
+      cursor: pointer; padding: 4px;
+      border-radius: 8px;
+      transition: background .2s;
+      z-index: 210;
+    }
+    .hamburger:hover { background: var(--cinza-1); }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--texto); border-radius: 2px;
+      transition: transform .3s ease, opacity .3s ease, width .3s ease;
+      transform-origin: center;
+    }
+    /* Animação → X */
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Overlay escuro ── */
+    .nav-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 180;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .nav-overlay.visible { opacity: 1; }
+
+    /* ── Drawer mobile ── */
+    .nav-mobile {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(300px, 85vw);
+      height: 100dvh;
+      background: var(--branco);
+      z-index: 190;
+      display: flex; flex-direction: column;
+      padding: 0;
+      box-shadow: -4px 0 32px rgba(0,0,0,.15);
+      transform: translateX(100%);
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+      overflow-y: auto;
+    }
+    .nav-mobile.open { transform: translateX(0); }
+
+    .nav-mobile-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--cinza-2);
+      position: sticky; top: 0;
+      background: var(--branco);
+      z-index: 1;
+    }
+    .nav-mobile-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; font-weight: 700; color: var(--texto);
+    }
+    .nav-close {
+      width: 32px; height: 32px; border: none; background: var(--cinza-1);
+      border-radius: 50%; cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--texto-suave); transition: background .2s;
+    }
+    .nav-close:hover { background: var(--cinza-2); }
+
+    .nav-mobile-links {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: 16px 12px;
+    }
+    .nav-mobile-links a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; border-radius: 10px;
+      text-decoration: none; font-size: 15px; font-weight: 500;
+      color: var(--texto-suave); transition: all .18s;
+    }
+    .nav-mobile-links a:hover { background: var(--cinza-1); color: var(--texto); }
+    .nav-mobile-links a.active {
+      background: #fbecea; color: var(--vermelho); font-weight: 600;
+    }
+    .nav-mobile-links a .nav-icon {
+      font-size: 18px; width: 24px; text-align: center;
+    }
+
+    .nav-mobile-footer {
+      margin-top: auto;
+      padding: 20px;
+      border-top: 1px solid var(--cinza-2);
+      font-size: 11px; color: var(--texto-suave);
+      line-height: 1.7;
+    }
+
+    /* ════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════ */
+    .hero {
+      background: linear-gradient(135deg, var(--vermelho) 0%, var(--vermelho-escuro) 100%);
+      padding: 56px 32px 52px;
+      text-align: center; color: #fff;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; font-weight: 700;
+      margin-bottom: 10px; letter-spacing: -.5px;
+    }
+    .hero p {
+      font-size: 15px; opacity: .85;
+      max-width: 520px; margin: 0 auto 28px; line-height: 1.6;
+    }
+
+    .search-wrapper { max-width: 640px; margin: 0 auto 24px; }
+    .search-box { position: relative; margin-bottom: 10px; }
+    .search-box input {
+      width: 100%; padding: 16px 56px 16px 20px;
+      border: none; border-radius: 50px;
+      font-size: 15px; font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 24px rgba(0,0,0,.18);
+      outline: none; color: var(--texto);
+    }
+    .search-box button {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      background: var(--vermelho); border: none; border-radius: 50px;
+      width: 42px; height: 42px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 17px; transition: background .2s;
+    }
+    .search-box button:hover { background: var(--vermelho-escuro); }
+
+    .adv-toggle-btn {
+      background: none; border: none; color: rgba(255,255,255,.75);
+      font-size: 12px; font-family: 'Inter', sans-serif;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 8px; border-radius: 20px; transition: color .2s, background .2s;
+      text-decoration: underline dotted rgba(255,255,255,.4);
+    }
+    .adv-toggle-btn:hover { color: #fff; background: rgba(255,255,255,.1); }
+
+    .adv-panel {
+      background: rgba(255,255,255,.12); backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.2); border-radius: 12px;
+      padding: 18px 20px 14px; margin-top: 10px;
+      text-align: left; display: none;
+    }
+    .adv-panel.open { display: block; }
+    .adv-panel-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 12px;
+    }
+    .adv-panel-grid label {
+      display: flex; flex-direction: column; gap: 4px;
+      font-size: 11px; font-weight: 500; color: rgba(255,255,255,.8);
+    }
+    .adv-panel-grid input {
+      padding: 7px 10px; border: 1px solid rgba(255,255,255,.3);
+      border-radius: 7px; font-size: 12px; font-family: 'Inter', sans-serif;
+      background: rgba(255,255,255,.15); color: #fff; outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .adv-panel-grid input::placeholder { color: rgba(255,255,255,.5); }
+    .adv-panel-grid input:focus {
+      border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.22);
+    }
+    .adv-panel-footer { display: flex; justify-content: flex-end; }
+    .btn-adv-buscar {
+      padding: 8px 20px; background: #fff; color: var(--vermelho);
+      border: none; border-radius: 7px; font-size: 12px; font-weight: 700;
+      font-family: 'Inter', sans-serif; cursor: pointer; transition: opacity .2s;
+    }
+    .btn-adv-buscar:hover { opacity: .88; }
+
+    .quick-filters {
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    }
+    .quick-filters label { cursor: pointer; }
+    .quick-filters input[type=radio] { display: none; }
+    .pill {
+      display: inline-block; padding: 6px 16px; border-radius: 20px;
+      border: 1.5px solid rgba(255,255,255,.45); color: rgba(255,255,255,.9);
+      font-size: 12px; font-weight: 500; transition: all .2s;
+      cursor: pointer; user-select: none;
+    }
+    .quick-filters input[type=radio]:checked + .pill,
+    .pill:hover { background: rgba(255,255,255,.2); border-color: #fff; color: #fff; }
+
+    /* ════════════════════════════════════════
+       OBRAS EM DESTAQUE
+    ════════════════════════════════════════ */
+    .section { max-width: 1100px; margin: 48px auto; padding: 0 32px; }
+    .section-header {
+      display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--texto); font-weight: 700;
+    }
+    .badge {
+      background: var(--cinza-1); color: var(--texto-suave);
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    }
+
+    .works-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .work-card {
+      background: var(--branco); border-radius: var(--radius);
+      box-shadow: var(--sombra); border: 1px solid var(--cinza-2);
+      display: flex; flex-direction: column; text-decoration: none;
+      color: inherit; overflow: hidden;
+      transition: transform .22s, box-shadow .22s; position: relative;
+    }
+    .work-card:hover {
+      transform: translateY(-5px); box-shadow: 0 12px 36px rgba(0,0,0,.13);
+    }
+    .work-card:hover .card-bar { opacity: 1; }
+    .card-bar {
+      height: 5px;
+      background: linear-gradient(90deg, var(--vermelho), var(--dourado));
+      opacity: .5; transition: opacity .22s;
+    }
+    .card-body {
+      padding: 20px 20px 16px; display: flex; flex-direction: column;
+      gap: 10px; flex: 1;
+    }
+    .card-header-row {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 8px;
+    }
+    .card-genre-badge {
+      flex-shrink: 0; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .6px;
+      padding: 3px 9px; border-radius: 20px;
+      background: #fbecea; color: var(--vermelho); margin-top: 2px;
+    }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; color: var(--texto);
+      line-height: 1.3; flex: 1;
+    }
+    .card-divider { height: 1px; background: var(--cinza-1); margin: 2px 0; }
+    .card-meta { display: flex; flex-direction: column; gap: 5px; }
+    .card-meta-row {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; color: var(--texto-suave);
+    }
+    .meta-icon {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--cinza-1); display: flex; align-items: center;
+      justify-content: center; font-size: 10px; flex-shrink: 0;
+    }
+    .card-footer {
+      padding: 10px 20px 14px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .card-cta {
+      font-size: 12px; font-weight: 600; color: var(--vermelho);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .cta-arrow {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #fbecea; display: flex; align-items: center;
+      justify-content: center; font-size: 11px;
+      transition: background .2s, transform .2s;
+    }
+    .work-card:hover .cta-arrow {
+      background: var(--vermelho); color: #fff; transform: translateX(3px);
+    }
+    .card-see-all {
+      border: 2px dashed var(--cinza-2); background: transparent; box-shadow: none;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; gap: 12px;
+      padding: 32px 20px; color: var(--texto-suave); text-decoration: none;
+      border-radius: var(--radius); transition: border-color .2s, background .2s, color .2s;
+    }
+    .card-see-all:hover {
+      border-color: var(--vermelho); background: #fbecea; color: var(--vermelho);
+    }
+    .card-see-all .see-icon { font-size: 28px; opacity: .5; }
+    .card-see-all:hover .see-icon { opacity: 1; }
+    .card-see-all span { font-size: 13px; font-weight: 600; }
+
+    /* ════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════ */
+    footer {
+      background: #1e1e1e; color: #aaa;
+      padding: 36px 32px; text-align: center;
+      font-size: 12px; line-height: 1.8;
+    }
+    footer strong { color: #fff; }
+    footer a { color: var(--dourado); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+
+    /* Tablet ≤ 900px */
+    @media (max-width: 900px) {
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .adv-panel-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Mobile ≤ 640px */
+    @media (max-width: 640px) {
+      /* Header */
+      .header-inner { padding: 0 16px; }
+      .nav-desktop { display: none; }
+      .hamburger { display: flex; }
+
+      /* Hero */
+      .hero { padding: 40px 20px 40px; }
+      .hero h1 { font-size: 1.75rem; }
+      .hero p { font-size: 14px; margin-bottom: 22px; }
+
+      /* Busca avançada — 2 colunas em mobile */
+      .adv-panel-grid { grid-template-columns: 1fr 1fr; }
+
+      /* Pills scroll horizontal */
+      .quick-filters {
+        flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start;
+        padding-bottom: 4px; scrollbar-width: none;
+      }
+      .quick-filters::-webkit-scrollbar { display: none; }
+      .pill { white-space: nowrap; }
+
+      /* Seção obras */
+      .section { padding: 0 16px; margin: 32px auto; }
+      .section-header { margin-bottom: 20px; }
+      .section-header h2 { font-size: 1.3rem; }
+
+      /* Grid obras: 1 coluna */
+      .works-grid { grid-template-columns: 1fr; gap: 14px; }
+
+      /* Footer */
+      footer { padding: 28px 20px; }
+    }
+
+    /* Telas muito pequenas ≤ 380px */
+    @media (max-width: 380px) {
+      .hero h1 { font-size: 1.45rem; }
+      .adv-panel-grid { grid-template-columns: 1fr; }
+      .logo-text span:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══ -->
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="https://acervo.casadochoro.com.br/portal">
+        <div class="logo-mark">♪</div>
+        <div class="logo-text">
+          <span>Casa do Choro</span>
+          <span>ACERVO MUSICAL</span>
+        </div>
+      </a>
+
+      <!-- Nav desktop -->
+      <nav class="nav-desktop">
+        <a href="https://acervo.casadochoro.com.br/Cards/index">Autores</a>
+        <a href="https://acervo.casadochoro.com.br/Works/index" class="active">Partituras</a>
+        <a href="https://acervo.casadochoro.com.br/Images/index">Imagens</a>
+        <a href="https://acervo.casadochoro.com.br/Videos/index">Vídeos</a>
+      </nav>
+
+      <!-- Botão hambúrguer (mobile) -->
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══ OVERLAY ══ -->
+  <div class="nav-overlay" id="nav-overlay" onclick="closeMenu()"></div>
+
+  <!-- ══ DRAWER MOBILE ══ -->
+  <nav class="nav-mobile" id="nav-mobile" aria-label="Menu principal">
+    <div class="nav-mobile-header">
+      <span class="nav-mobile-title">Menu</span>
+      <button class="nav-close" onclick="closeMenu()" aria-label="Fechar menu">✕</button>
+    </div>
+
+    <div class="nav-mobile-links">
+      <a href="https://acervo.casadochoro.com.br/Cards/index">
+        <span class="nav-icon">🎼</span> Autores
+      </a>
+      <a href="https://acervo.casadochoro.com.br/Works/index" class="active">
+        <span class="nav-icon">📄</span> Partituras
+      </a>
+      <a href="https://acervo.casadochoro.com.br/Images/index">
+        <span class="nav-icon">🖼️</span> Imagens
+      </a>
+      <a href="https://acervo.casadochoro.com.br/Videos/index">
+        <span class="nav-icon">🎬</span> Vídeos
+      </a>
+    </div>
+
+    <div class="nav-mobile-footer">
+      <strong style="color:var(--texto);">Instituto Casa do Choro</strong><br/>
+      Rua da Carioca 38 – Rio de Janeiro<br/>
+      <a href="mailto:contato@casadochoro.com.br" style="color:var(--vermelho);">contato@casadochoro.com.br</a>
+    </div>
+  </nav>
+
+  <!-- ══ HERO + BUSCA ══ -->
+  <section class="hero">
+    <h1>Catálogo de Partituras</h1>
+    <p>Mais de 10.000 títulos de compositores dos séculos XIX e XX, disponíveis para consulta e download.</p>
+
+    <div class="search-wrapper">
+      <div class="search-box">
+        <form action="https://acervo.casadochoro.com.br/Works/index" method="get">
+          <input type="text" name="title" placeholder="Buscar por título, compositor, gênero…" />
+          <button type="submit">&#128269;</button>
+        </form>
+      </div>
+
+      <button class="adv-toggle-btn" onclick="toggleAdv()" id="adv-toggle">
+        ⚙ Busca avançada
+      </button>
+
+      <div class="adv-panel" id="adv-panel">
+        <form action="https://acervo.casadochoro.com.br/Works/index" method="get">
+          <div class="adv-panel-grid">
+            <label>Título<input type="text" name="title" placeholder="Ex: Noite de luar" /></label>
+            <label>Compositor<input type="text" name="artistic_name" placeholder="Ex: Chiquinha Gonzaga" /></label>
+            <label>Arranjador<input type="text" name="arranger" placeholder="Ex: Jacob do Bandolim" /></label>
+            <label>Gênero<input type="text" name="genre" placeholder="Ex: Valsa, Choro…" /></label>
+            <label>Período – início<input type="text" name="date_start" placeholder="Ex: 1890" /></label>
+            <label>Período – fim<input type="text" name="date_end" placeholder="Ex: 1950" /></label>
+          </div>
+          <div class="adv-panel-footer">
+            <button type="submit" class="btn-adv-buscar">Buscar →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="quick-filters">
+      <label><input type="radio" name="genero" value="" checked><span class="pill">Todos os gêneros</span></label>
+      <label><input type="radio" name="genero" value="Choro"><span class="pill">Choro</span></label>
+      <label><input type="radio" name="genero" value="Valsa"><span class="pill">Valsa</span></label>
+      <label><input type="radio" name="genero" value="Polca"><span class="pill">Polca</span></label>
+      <label><input type="radio" name="genero" value="Maxixe"><span class="pill">Maxixe</span></label>
+      <label><input type="radio" name="genero" value="Schottisch"><span class="pill">Schottisch</span></label>
+      <label><input type="radio" name="genero" value="Dobrado"><span class="pill">Dobrado</span></label>
+    </div>
+  </section>
+
+  <!-- ══ OBRAS EM DESTAQUE ══ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Obras em Destaque</h2>
+      <span class="badge">Seleção do acervo</span>
+    </div>
+
+    <div class="works-grid">
+
+      <a class="work-card" href="https://acervo.casadochoro.com.br/works/view/10635">
+        <div class="card-bar"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Xirú</div>
+            <span class="card-genre-badge">Choro</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-icon">👤</span> Compositor não informado</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-cta">Ver partitura <span class="cta-arrow">→</span></div>
+        </div>
+      </a>
+
+      <a class="work-card" href="https://acervo.casadochoro.com.br/works/view/7130">
+        <div class="card-bar"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Agora vai</div>
+            <span class="card-genre-badge">Choro</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-icon">👤</span> Compositor não informado</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-cta">Ver partitura <span class="cta-arrow">→</span></div>
+        </div>
+      </a>
+
+      <a class="work-card" href="https://acervo.casadochoro.com.br/works/view/3788">
+        <div class="card-bar"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Choro verde</div>
+            <span class="card-genre-badge">Choro</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-icon">👤</span> Compositor não informado</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-cta">Ver partitura <span class="cta-arrow">→</span></div>
+        </div>
+      </a>
+
+      <a class="work-card" href="https://acervo.casadochoro.com.br/works/view/9097">
+        <div class="card-bar"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Estranha saudade</div>
+            <span class="card-genre-badge">Valsa</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-icon">👤</span> Cristovão Bastos</div>
+            <div class="card-meta-row"><span class="meta-icon">✍</span> Hermínio Bello de Carvalho</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-cta">Ver partitura <span class="cta-arrow">→</span></div>
+        </div>
+      </a>
+
+      <a class="work-card" href="https://acervo.casadochoro.com.br/works/view/8380">
+        <div class="card-bar"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Perfume de valsa</div>
+            <span class="card-genre-badge">Valsa</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-icon">👤</span> Mauricio Carrilho</div>
+            <div class="card-meta-row"><span class="meta-icon">📅</span> 2005</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-cta">Ver partitura <span class="cta-arrow">→</span></div>
+        </div>
+      </a>
+
+      <a class="work-card" href="https://acervo.casadochoro.com.br/works/view/723">
+        <div class="card-bar"></div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Centenário de Pirassununga</div>
+            <span class="card-genre-badge">Dobrado</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><span class="meta-icon">👤</span> Erotides Campos</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-cta">Ver partitura <span class="cta-arrow">→</span></div>
+        </div>
+      </a>
+
+      <a class="card-see-all" href="https://acervo.casadochoro.com.br/Works/index">
+        <div class="see-icon">🎼</div>
+        <span>Explorar todo o acervo</span>
+        <small style="font-size:11px;opacity:.7">+10.000 partituras disponíveis</small>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <strong>Instituto Casa do Choro</strong> | Todos os direitos reservados | 2013<br/>
+    Rua da Carioca 38 – Centro, Rio de Janeiro<br/>
+    +55 21 2242-9947 | <a href="mailto:contato@casadochoro.com.br">contato@casadochoro.com.br</a>
+  </footer>
+
+  <script>
+    /* ── Hambúrguer / Drawer ── */
+    const hamburger  = document.getElementById('hamburger');
+    const navMobile  = document.getElementById('nav-mobile');
+    const navOverlay = document.getElementById('nav-overlay');
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      navMobile.classList.add('open');
+      navOverlay.style.display = 'block';
+      requestAnimationFrame(() => navOverlay.classList.add('visible'));
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      navMobile.classList.remove('open');
+      navOverlay.classList.remove('visible');
+      document.body.style.overflow = '';
+      setTimeout(() => { navOverlay.style.display = 'none'; }, 300);
+    }
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    /* Fechar com Esc */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    /* ── Busca avançada ── */
+    function toggleAdv() {
+      const panel = document.getElementById('adv-panel');
+      const btn   = document.getElementById('adv-toggle');
+      const open  = panel.classList.toggle('open');
+      btn.textContent = open ? '✕ Fechar busca avançada' : '⚙ Busca avançada';
+    }
+
+    /* ── Pills de gênero ── */
+    document.querySelectorAll('.quick-filters input[type=radio]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const genero = radio.value;
+        const input  = document.querySelector('.search-box input');
+        input.placeholder = genero
+          ? `Buscando no gênero: ${genero}…`
+          : 'Buscar por título, compositor, gênero…';
+      });
+    });
+  </script>
+
+</body>
+</html>
